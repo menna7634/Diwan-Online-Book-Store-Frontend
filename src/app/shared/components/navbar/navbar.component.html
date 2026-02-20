@@ -1,0 +1,140 @@
+<nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+    <div class="w-full px-6 lg:px-10 h-20 flex items-center justify-between">
+
+        <!-- Logo (Left) -->
+        <div class="flex-1 flex items-center justify-start">
+            <a routerLink="/" class="flex items-center no-underline flex-shrink-0">
+                <img src="logoW.png" alt="Diwan" class="h-24 w-auto" />
+            </a>
+        </div>
+
+        <!-- Nav Links - hidden on mobile (Center) -->
+        <ul class="hidden md:flex items-center gap-1 list-none m-0 p-0 justify-center">
+            <li><a routerLink="/" routerLinkActive="font-semibold" [routerLinkActiveOptions]="{exact:true}"
+                    class="px-4 py-2 rounded-lg text-sm font-medium text-textSub no-underline hover:bg-primary/10 transition-all">Home</a>
+            </li>
+            <li><a routerLink="/books" routerLinkActive="font-semibold"
+                    class="px-4 py-2 rounded-lg text-sm font-medium text-textSub no-underline hover:bg-primary/10 transition-all">Explore</a>
+            </li>
+            <li><a routerLink="/books"
+                    class="px-4 py-2 rounded-lg text-sm font-medium text-textSub no-underline hover:bg-primary/10 transition-all">Shop</a>
+            </li>
+            <li *ngIf="isAdmin"><a routerLink="/admin" routerLinkActive="font-semibold"
+                    class="px-4 py-2 rounded-lg text-sm font-medium text-textSub no-underline hover:bg-primary/10 transition-all">Dashboard</a>
+            </li>
+        </ul>
+
+        <div class="flex-1 flex items-center justify-end gap-3">
+
+            <!-- Search - hidden on mobile -->
+            <div
+                class="hidden md:flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 transition-all">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" placeholder="Search books..."
+                    class="bg-transparent border-none outline-none text-sm w-44 text-textMain"
+                    (keyup.enter)="onSearch($event)" />
+            </div>
+
+            <!-- Cart -->
+            <a routerLink="/cart" *ngIf="isLoggedIn"
+                class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gray-50 no-underline hover:bg-primary/10 text-textMain transition-all">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg>
+                <span *ngIf="cartCount > 0"
+                    class="absolute -top-1 -right-1 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white bg-primary">
+                    {{ cartCount }}
+                </span>
+            </a>
+
+            <!-- Avatar + Dropdown -->
+            <div class="relative" *ngIf="isLoggedIn">
+                <div (click)="toggleDropdown()"
+                    class="w-9 h-9 rounded-full text-white text-sm font-bold flex items-center justify-center cursor-pointer select-none transition-opacity hover:opacity-85 bg-primary">
+                    {{ userInitial }}
+                </div>
+                <div *ngIf="dropdownOpen"
+                    class="absolute top-12 right-0 bg-white border border-gray-100 rounded-2xl shadow-lg p-2 flex flex-col"
+                    style="min-width:160px">
+                    <a routerLink="/orders" (click)="dropdownOpen=false"
+                        class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">My
+                        Orders</a>
+                    <a routerLink="/profile" (click)="dropdownOpen=false"
+                        class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">Profile</a>
+                    <hr class="border-gray-100 my-1" />
+                    <button (click)="logout()"
+                        class="px-4 py-2 rounded-lg text-sm font-medium text-left bg-transparent border-none cursor-pointer hover:bg-error/10 transition-all text-error">Logout</button>
+                </div>
+            </div>
+
+            <!-- Auth Buttons -->
+            <div class="hidden md:flex items-center gap-2" *ngIf="!isLoggedIn">
+                <a routerLink="/auth/login"
+                    class="px-4 py-2 rounded-xl text-sm font-semibold no-underline hover:bg-primary/10 transition-all text-primary">Login</a>
+                <a routerLink="/auth/register"
+                    class="px-4 py-2 rounded-xl text-sm font-semibold text-white no-underline bg-primary hover:bg-primaryHover transition-all">Sign
+                    Up</a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button (click)="toggleMobile()"
+                class="md:hidden flex flex-col gap-1 bg-transparent border-none cursor-pointer p-1">
+                <span class="block w-5 bg-gray-800 rounded" style="height:2px"></span>
+                <span class="block w-5 bg-gray-800 rounded" style="height:2px"></span>
+                <span class="block w-5 bg-gray-800 rounded" style="height:2px"></span>
+            </button>
+
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div *ngIf="mobileOpen" class="md:hidden border-t border-gray-100 px-6 py-3 flex flex-col gap-1">
+
+        <a routerLink="/" (click)="mobileOpen=false"
+            class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">Home</a>
+        <a routerLink="/books" (click)="mobileOpen=false"
+            class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">Explore</a>
+        <a routerLink="/books" (click)="mobileOpen=false"
+            class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">Shop</a>
+
+        <!-- Mobile Search -->
+        <div class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 mt-1">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" placeholder="Search books..."
+                class="bg-transparent border-none outline-none text-sm w-full" (keyup.enter)="onSearch($event)" />
+        </div>
+
+        <hr class="border-gray-100 my-1" />
+
+        <ng-container *ngIf="isLoggedIn">
+            <a routerLink="/cart" (click)="mobileOpen=false"
+                class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">
+                Cart <span *ngIf="cartCount > 0" class="font-bold text-primary">({{ cartCount }})</span>
+            </a>
+            <a routerLink="/orders" (click)="mobileOpen=false"
+                class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">My
+                Orders</a>
+            <a routerLink="/admin" (click)="mobileOpen=false" *ngIf="isAdmin"
+                class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">Dashboard</a>
+            <button (click)="logout()"
+                class="px-4 py-2 rounded-lg text-sm font-medium text-left bg-transparent border-none cursor-pointer hover:bg-error/10 transition-all text-error">Logout</button>
+        </ng-container>
+
+        <ng-container *ngIf="!isLoggedIn">
+            <a routerLink="/auth/login" (click)="mobileOpen=false"
+                class="px-4 py-3 rounded-xl text-sm font-semibold no-underline hover:bg-primary/10 transition-all text-primary">Login</a>
+            <a routerLink="/auth/register" (click)="mobileOpen=false"
+                class="px-4 py-3 rounded-xl text-sm font-semibold text-white no-underline bg-primary hover:bg-primaryHover transition-all text-center">Sign
+                Up</a>
+        </ng-container>
+
+    </div>
+</nav>
