@@ -62,9 +62,9 @@
 
             <!-- Auth Buttons -->
             <div class="hidden md:flex items-center gap-2" *ngIf="!isLoggedIn">
-                <a routerLink="/auth/login"
+                <a routerLink="/login"
                     class="px-4 py-2 rounded-xl text-sm font-semibold no-underline hover:bg-primary/10 transition-all text-primary">Login</a>
-                <a routerLink="/auth/register"
+                <a routerLink="/register"
                     class="px-4 py-2 rounded-xl text-sm font-semibold text-white no-underline bg-primary hover:bg-primaryHover transition-all">Sign
                     Up</a>
             </div>
@@ -107,9 +107,9 @@
         </ng-container>
 
         <ng-container *ngIf="!isLoggedIn">
-            <a routerLink="/auth/login" (click)="mobileOpen=false"
+            <a routerLink="/login" (click)="mobileOpen=false"
                 class="px-4 py-3 rounded-xl text-sm font-semibold no-underline hover:bg-primary/10 transition-all text-primary">Login</a>
-            <a routerLink="/auth/register" (click)="mobileOpen=false"
+            <a routerLink="/register" (click)="mobileOpen=false"
                 class="px-4 py-3 rounded-xl text-sm font-semibold text-white no-underline bg-primary hover:bg-primaryHover transition-all text-center">Sign
                 Up</a>
         </ng-container>
