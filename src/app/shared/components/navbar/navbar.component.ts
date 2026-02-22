@@ -1,9 +1,11 @@
 // navbar.component.ts
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { map, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -12,14 +14,16 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule],
 })
 export class NavbarComponent implements OnInit {
-  isLoggedIn = false;
-  isAdmin = false;
+  private authService = inject(AuthService);
+
+  isLoggedIn = this.authService.user$.pipe(map(user => !!user), shareReplay(1));
+  isAdmin = this.authService.user$.pipe(map(user => user?.role == 'admin'), shareReplay(1));
   cartCount = 0;
   userInitial = '';
   dropdownOpen = false;
   mobileOpen = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     //  هتجيب البيانات دي من AuthService
@@ -45,11 +49,14 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(): void {
-    // this.authService.logout();
-    this.isLoggedIn = false;
-    this.dropdownOpen = false;
-    this.mobileOpen = false;
-    this.router.navigate(['/auth/login']);
+    this.authService.logout().subscribe({
+      next: () => {
+        this.dropdownOpen = false;
+        this.mobileOpen = false;
+        this.router.navigate(['/auth/login']);
+      }
+    });
+
   }
 
   // Close dropdown when clicking outside
