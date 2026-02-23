@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   imports: [ReactiveFormsModule],
   templateUrl: './login.page.html',
 })
-export class LoginPage implements OnInit{
+export class LoginPage implements OnInit {
   authService = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -22,6 +22,16 @@ export class LoginPage implements OnInit{
 
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+
+    // reset serverError when ever is typed
+    this.loginForm.valueChanges.subscribe(() => {
+      const emailControl = this.loginForm.get('email');
+      if (emailControl?.hasError('serverError')) {
+        emailControl.setErrors(null);
+        emailControl.updateValueAndValidity({ emitEvent: false });
+      }
+
+    });
   }
   errorMessage = "";
 
