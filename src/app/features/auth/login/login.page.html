@@ -1,0 +1,32 @@
+<div class="bg-light min-h-[calc(100vh-80px)] flex flex-col pt-16">
+  <div class="w-full max-w-sm mx-auto">
+    <div class=" mx-auto bg-card shadow-xl border- border-gray-100 p-5">
+      @let email = this.loginForm.get('email');
+      @let password = this.loginForm.get('password');
+      <span class="font-bold text-3xl">Sign in, Brother!</span>
+      <form [formGroup]="loginForm" action="#" class=" space-y-5" (ngSubmit)="onSubmit()">
+        <div>
+          <label for="email" class="block">email</label>
+          <input type="email" name="email" formControlName="email" class="w-full border rounded-lg min-h-8">
+          @if (email?.invalid && (email?.dirty || email?.touched)) {
+          <div class="error">
+            @if (email?.errors?.['required']) { <small class="text-error">Required</small> }
+            @if (email?.errors?.['email']) { <small class="text-error">invalid email</small> }
+            @if (email?.errors?.['serverError']) { <small class="text-error">{{email?.errors?.['serverError']}}</small> }
+          </div>
+          }
+        </div>
+        <div>
+          <label for="email" class="block">password</label>
+          <input type="password" name="password" formControlName="password" class="w-full border rounded-lg min-h-8">
+          @if (password?.invalid && (password?.dirty || password?.touched)) {
+          <small class="text-error">required</small>
+          }
+        </div>
+
+        <button type="submit"
+          class=" w-full px-4 py-2 rounded-xl text-sm font-semibold text-white no-underline bg-primary hover:bg-primaryHover transition-all">Login</button>
+      </form>
+    </div>
+  </div>
+</div>
