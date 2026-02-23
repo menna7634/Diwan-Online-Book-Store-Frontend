@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { KeyValuePipe, AsyncPipe } from '@angular/common';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, finalize } from 'rxjs';
 import { Router } from '@angular/router';
 
 const passwordMatchValidator: ValidatorFn = (control: AbstractControl) => {
@@ -20,8 +20,8 @@ const noFutureDateValidator: ValidatorFn = (control: AbstractControl) => {
   const date = new Date(control.value);
   const today = new Date();
   today.setHours(0, 0, 0);
-  if(control.value && date > today) {
-    return {futureDate: true}
+  if (control.value && date > today) {
+    return { futureDate: true }
   }
   return null;
 }
@@ -35,6 +35,8 @@ export class RegisterPage {
   private authService = inject(AuthService);
   private router = inject(Router);
   pending = new BehaviorSubject<boolean>(false);
+
+  private serverErrorMessages: { [key: string]: string } = {};
 
   registerForm = this.fb.group({
     "email": ['', [Validators.required, Validators.email]],
@@ -56,7 +58,7 @@ export class RegisterPage {
   onSubmit() {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
-      return ;
+      return;
     }
     this.pending.next(true);
     this.authService.register(
@@ -74,21 +76,33 @@ export class RegisterPage {
           zipCode: this.registerForm.get('address_zip_code')?.value || '',
         }
       }
-    ).subscribe({
+    ).pipe(finalize(() => this.pending.next(false))).subscribe({
       next: (user) => {
         console.log(user);
         this.router.navigateByUrl('/login');
       },
       error: (error) => {
+        if (error.error.details === "Email already used")
+          this.registerForm.get('email')?.setErrors({ "emailUsed": true })
+        else if (error.error.details) {
+          this.populateFieldErrors(error.error.details);
+        }
         console.error(error);
-      },
-      complete: () => {
-        this.pending.next(false);
       }
     });
   }
+  private populateFieldErrors(errors: any[]) {
+    for (let i = 0; i < errors.length; i++) {
+      const error = errors[i];
+      const key = error.context.key;
+      const message = error.message;
 
+      this.registerForm.get(key)?.setErrors({ [`${key}ServerError`]: true })
+      this.serverErrorMessages[`${key}ServerError`] = message;
+    }
+  }
   getErrorMessage(errorKey: string, errorValue: any): string {
+
     const messages: { [key: string]: string } = {
       required: 'This field is required.',
       email: 'Please enter a valid email address.',
@@ -96,8 +110,9 @@ export class RegisterPage {
       maxlength: `Maximum length is ${errorValue?.requiredLength} characters.`,
       futureDate: `can't have future date for date of birth.`,
       pattern: 'Password must contain a mix of letters, numbers, and special characters.',
+      emailUsed: 'Email already in use',
     };
 
-    return messages[errorKey] || 'Invalid input.';
+    return messages[errorKey] || this.serverErrorMessages[errorKey] ||'Invalid input.';
   }
 }
