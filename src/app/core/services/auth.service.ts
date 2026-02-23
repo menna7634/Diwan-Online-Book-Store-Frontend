@@ -3,6 +3,7 @@ import { BehaviorSubject, catchError, finalize, map, Observable, of, switchMap, 
 import { User } from '../types/user';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { RegisterationRequestBody } from '../types/auth';
 
 interface AuthResponse {
   access_token: string;
@@ -17,6 +18,10 @@ export class AuthService {
   private _user$ = new BehaviorSubject<User | null>(null);
   public user$ = this._user$.asObservable();
 
+  register(userData: RegisterationRequestBody) {
+    return this.http.post<User>(`${environment.apiUrl}/auth/register`, userData);
+  }
+
   login(email: string, password: string): Observable<User> {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, {
       email,
@@ -24,6 +29,7 @@ export class AuthService {
     }).pipe(
       tap((tokens) => this.saveTokens(tokens)),
       switchMap(tokens => this.getUserProfile()),
+      tap((user) => this._user$.next(user))
     );
   }
   getUserProfile() : Observable<User> {
@@ -38,6 +44,7 @@ export class AuthService {
       })
     );
   }
+
   hydrate() : Observable<User | null> {
     if(!this.getAccessToken())
       return of(null);
@@ -49,6 +56,7 @@ export class AuthService {
       })
     )
   }
+
   refreshAccessToken(): Observable<any> {
     return this.http.post(`${environment.apiUrl}/auth/refresh`, {
       refresh_token: localStorage.getItem("refresh_token")
@@ -61,6 +69,7 @@ export class AuthService {
       })
     )
   }
+
   getAccessToken() {
     return localStorage.getItem("access_token");
   }
