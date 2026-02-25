@@ -1,0 +1,64 @@
+<div class="flex flex-col md:flex-row min-h-screen bg-gray-100 font-sans">
+
+  <aside class="bg-white shadow-lg transition-all duration-300 ease-in-out fixed md:static inset-y-0 left-0 z-50"
+    [ngClass]="{'w-64': isSidebarOpen(), 'w-20 hidden md:block': !isSidebarOpen()}">
+
+    <div class="p-4 flex items-center justify-between border-b">
+
+      <button (click)="toggleSidebar()" class="p-2 rounded-full hover:bg-gray-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+
+    <nav class="py-4">
+      <ul class="space-y-2">
+        <li>
+          <a routerLink="dashboard" routerLinkActive="bg-gray-100" [routerLinkActiveOptions]="{exact: true}"
+            class="flex items-center space-x-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors">
+            @if (isSidebarOpen()) {<span>Dashboard</span>}
+
+          </a>
+        </li>
+        <li>
+          <a routerLink="orders" routerLinkActive="bg-gray-100"
+            class="flex items-center space-x-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors">
+            @if (isSidebarOpen()) {<span>Orders</span>}
+          </a>
+        </li>
+        <li>
+          <a routerLink="authors" routerLinkActive="bg-gray-100"
+            class="flex items-center space-x-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors">
+            @if (isSidebarOpen()) {<span>Authors</span>}
+          </a>
+        </li>
+        <li>
+          <a routerLink="books" routerLinkActive="bg-gray-100"
+            class="flex items-center space-x-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors">
+            @if (isSidebarOpen()) {<span>Books</span>}
+          </a>
+        </li>
+        <li>
+          <a routerLink="categories" routerLinkActive="bg-gray-100"
+            class="flex items-center space-x-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition-colors">
+            @if (isSidebarOpen()) {<span>categories</span>}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="flex-1 p-4 md:p-6 overflow-y-auto">
+    <div class="md:hidden flex justify-between items-center mb-4">
+      <h1 class="text-xl font-bold text-gray-800">E-Commerce</h1>
+      <button (click)="toggleSidebar()" class="p-2 rounded-full hover:bg-gray-200">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+
+    <router-outlet></router-outlet>
+  </main>
+</div>
