@@ -9,6 +9,7 @@ import { OrdersPage } from './core/features/admin/orders/orders.page';
 import { AuthorsPage } from './core/features/admin/authors/authors.page';
 import { CategoriesPage } from './core/features/admin/categories/categories.page';
 import { BooksPage } from './core/features/admin/books/books.page';
+import { isadminGuard } from './core/guards/isadmin-guard';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -25,6 +26,7 @@ export const routes: Routes = [
   {
     path: "admin",
     component: AdminPanelLayout,
+    canActivate: [isadminGuard],
     children: [
       {
         path: 'dashboard',

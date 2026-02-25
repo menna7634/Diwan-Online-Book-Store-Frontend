@@ -19,7 +19,7 @@
             <li><a routerLink="/books"
                     class="px-4 py-2 rounded-lg text-sm font-medium text-textSub no-underline hover:bg-primary/10 transition-all">Shop</a>
             </li>
-            <li *ngIf="isAdmin"><a routerLink="/admin" routerLinkActive="font-semibold"
+            <li *ngIf="isAdmin | async"><a routerLink="/admin" routerLinkActive="font-semibold"
                     class="px-4 py-2 rounded-lg text-sm font-medium text-textSub no-underline hover:bg-primary/10 transition-all">Dashboard</a>
             </li>
         </ul>
@@ -44,7 +44,7 @@
             <div class="user-menu relative" *ngIf="isLoggedIn | async">
                 <div (click)="toggleDropdown()"
                     class="w-9 h-9 rounded-full text-white text-sm font-bold flex items-center justify-center cursor-pointer select-none transition-opacity hover:opacity-85 bg-primary">
-                    {{ userInitial }}
+                    {{ userInitial | async}}
                 </div>
                 <div *ngIf="dropdownOpen"
                     class="absolute top-12 right-0 bg-white border border-gray-100 rounded-2xl shadow-lg p-2 flex flex-col"
@@ -100,7 +100,7 @@
             <a routerLink="/orders" (click)="mobileOpen=false"
                 class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">My
                 Orders</a>
-            <a routerLink="/admin" (click)="mobileOpen=false" *ngIf="isAdmin"
+            <a routerLink="/admin" (click)="mobileOpen=false" *ngIf="isAdmin | async"
                 class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">Dashboard</a>
             <button (click)="logout()"
                 class="px-4 py-2 rounded-lg text-sm font-medium text-left bg-transparent border-none cursor-pointer hover:bg-error/10 transition-all text-error">Logout</button>
