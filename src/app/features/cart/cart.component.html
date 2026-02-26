@@ -118,6 +118,7 @@
                 <button
                   (click)="increaseQty(item)"
                   [disabled]="updatingBook === item.bookId"
+                  aria-label="Increase quantity"
                   class="w-7 h-7 rounded-lg flex items-center justify-center text-gray-600 hover:bg-white hover:shadow-sm transition-all border-none bg-transparent cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <svg
@@ -142,6 +143,7 @@
                 <button
                   (click)="removeItem(item.bookId)"
                   [disabled]="removingBook === item.bookId"
+                  aria-label="Remove Item"
                   class="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:text-error hover:bg-error/10 transition-all border-none bg-transparent cursor-pointer opacity-0 group-hover:opacity-100 disabled:cursor-not-allowed"
                 >
                   <svg
