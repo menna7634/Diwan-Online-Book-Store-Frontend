@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit {
   isLoggedIn = this.authService.user$.pipe(map(user => !!user), shareReplay(1));
   isAdmin = this.authService.user$.pipe(map(user => user?.role == 'admin'), shareReplay(1));
   cartCount = 0;
-  userInitial = this.authService.user$.pipe(map(user => user?.firstname.charAt(0) || 'U'), shareReplay(1));
+  userInitial = this.authService.user$.pipe(map(user => user?.firstname.charAt(0).toUpperCase() || 'U'), shareReplay(1));
   dropdownOpen = false;
   mobileOpen = false;
 
