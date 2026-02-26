@@ -14,17 +14,17 @@ import { isadminGuard } from './core/guards/isadmin-guard';
 export const routes: Routes = [
   { path: '', component: Home },
   {
-    path: "login",
+    path: 'login',
     component: LoginPage,
-    canActivate: [guestGuard]
+    canActivate: [guestGuard],
   },
   {
-    path: "register",
+    path: 'register',
     component: RegisterPage,
-    canActivate: [guestGuard]
+    canActivate: [guestGuard],
   },
   {
-    path: "admin",
+    path: 'admin',
     component: AdminPanelLayout,
     canActivate: [isadminGuard],
     children: [
@@ -51,8 +51,23 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'dashboard',
-        pathMatch: 'full'
-      }
-    ]
-  }
+        pathMatch: 'full',
+      },
+    ],
+  },
+
+  {
+    path: 'cart',
+    loadComponent: () => import('./features/cart/cart.component').then((m) => m.CartComponent),
+  },
+  {
+    path: 'checkout',
+    loadComponent: () =>
+      import('./features/checkout/checkout.component').then((m) => m.CheckoutComponent),
+  },
+  {
+    path: 'orders',
+    loadComponent: () =>
+      import('./features/orders/orders.component').then((m) => m.OrdersComponent),
+  },
 ];
