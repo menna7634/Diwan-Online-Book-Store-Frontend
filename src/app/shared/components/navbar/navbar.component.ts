@@ -13,7 +13,7 @@ import { map, shareReplay } from 'rxjs';
   standalone: true,
   imports: [CommonModule, RouterModule],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   private authService = inject(AuthService);
 
   isLoggedIn = this.authService.user$.pipe(map(user => !!user), shareReplay(1));
@@ -25,13 +25,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(private router: Router) { }
 
-  ngOnInit(): void {
-    //  هتجيب البيانات دي من AuthService
-    // مثال:
-    // this.isLoggedIn = this.authService.isLoggedIn();
-    // this.isAdmin = this.authService.isAdmin();
-    // this.userInitial = this.authService.getUserInitial();
-  }
+
 
   onSearch(event: any): void {
     const query = event.target.value;
