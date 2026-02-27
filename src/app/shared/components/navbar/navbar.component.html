@@ -13,9 +13,6 @@
             <li><a routerLink="/" routerLinkActive="font-semibold" [routerLinkActiveOptions]="{exact:true}"
                     class="px-4 py-2 rounded-lg text-sm font-medium text-textSub no-underline hover:bg-primary/10 transition-all">Home</a>
             </li>
-            <li><a routerLink="/books" routerLinkActive="font-semibold"
-                    class="px-4 py-2 rounded-lg text-sm font-medium text-textSub no-underline hover:bg-primary/10 transition-all">Explore</a>
-            </li>
             <li><a routerLink="/books"
                     class="px-4 py-2 rounded-lg text-sm font-medium text-textSub no-underline hover:bg-primary/10 transition-all">Shop</a>
             </li>
@@ -55,7 +52,7 @@
                     <a routerLink="/profile" (click)="dropdownOpen=false"
                         class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">Profile</a>
                     <hr class="border-gray-100 my-1" />
-                    <button (click)="logout()"
+                    <button routerLink="/" (click)="logout()"
                         class="px-4 py-2 rounded-lg text-sm font-medium text-left bg-transparent border-none cursor-pointer hover:bg-error/10 transition-all text-error">Logout</button>
                 </div>
             </div>
@@ -85,8 +82,7 @@
 
         <a routerLink="/" (click)="mobileOpen=false"
             class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">Home</a>
-        <a routerLink="/books" (click)="mobileOpen=false"
-            class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">Explore</a>
+
         <a routerLink="/books" (click)="mobileOpen=false"
             class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">Shop</a>
 
@@ -102,7 +98,7 @@
                 Orders</a>
             <a routerLink="/admin" (click)="mobileOpen=false" *ngIf="isAdmin | async"
                 class="px-4 py-3 rounded-xl text-sm font-medium text-gray-600 no-underline hover:bg-gray-50 transition-all">Dashboard</a>
-            <button (click)="logout()"
+            <button routerLink="/" (click)="mobileOpen=false" (click)="logout()"
                 class="px-4 py-2 rounded-lg text-sm font-medium text-left bg-transparent border-none cursor-pointer hover:bg-error/10 transition-all text-error">Logout</button>
         </ng-container>
 
