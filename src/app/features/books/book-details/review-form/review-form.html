@@ -1,0 +1,53 @@
+<div class="mt-6 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+
+  <h3 class="text-lg font-bold text-textMain mb-4">Write a Review</h3>
+
+  <!-- Success Message -->
+  <div *ngIf="successMessage"
+    class="bg-green-50 text-green-600 text-sm p-3 rounded mb-4">
+    {{ successMessage }}
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage"
+    class="bg-red-50 text-red-500 text-sm p-3 rounded mb-4">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Stars -->
+  <div class="mb-4">
+    <p class="text-sm text-textSub mb-2">Your Rating *</p>
+    <div class="flex gap-1">
+      <span *ngFor="let star of [1,2,3,4,5]"
+        (click)="setRating(star)"
+        [class]="star <= selectedRating ? 'text-yellow-400' : 'text-gray-300'"
+        class="text-3xl cursor-pointer hover:text-yellow-400 transition-colors">
+        ★
+      </span>
+    </div>
+  </div>
+
+  <!-- Comment -->
+  <div class="mb-4">
+    <p class="text-sm text-textSub mb-2">Your Comment (optional)</p>
+    <textarea
+      [(ngModel)]="comment"
+      rows="3"
+      maxlength="500"
+      placeholder="Share your thoughts about this book..."
+      class="w-full border border-gray-200 rounded-lg p-3 text-sm text-textMain focus:outline-none focus:border-primary resize-none">
+    </textarea>
+    <p class="text-xs text-gray-400 text-right mt-1">
+      {{ comment.length }} / 500
+    </p>
+  </div>
+
+  <!-- Submit Button -->
+  <button
+    (click)="submitReview()"
+    [disabled]="isLoading || selectedRating === 0"
+    class="w-full bg-primary text-white py-3 rounded-lg font-medium disabled:opacity-40 hover:opacity-90 transition-opacity">
+    {{ isLoading ? 'Submitting...' : 'Submit Review' }}
+  </button>
+
+</div>

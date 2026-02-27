@@ -1,32 +1,61 @@
 <div class="bg-light min-h-[calc(100vh-80px)] flex flex-col pt-16">
   <div class="w-full max-w-sm mx-auto">
-    <div class=" mx-auto bg-card shadow-xl border- border-gray-100 p-5">
+    <div class=" mx-auto bg-card shadow-xl border border-gray-100 p-8 rounded-xl">
       @let email = this.loginForm.get('email');
       @let password = this.loginForm.get('password');
-      <span class="font-bold text-3xl">Sign in, Brother!</span>
-      <form [formGroup]="loginForm" action="#" class=" space-y-5" (ngSubmit)="onSubmit()">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Welcome Back</h1>
+        <p class="text-gray-500 mt-2 text-sm">Sign in to your account to continue</p>
+      </div>
+      <form [formGroup]="loginForm" action="#" class="space-y-5" (ngSubmit)="onSubmit()">
         <div>
-          <label for="email" class="block">email</label>
-          <input type="email" name="email" formControlName="email" class="w-full border rounded-lg min-h-8">
+          <label for="email" class="block font-medium mb-1">email</label>
+          <input type="email" id="email" formControlName="email"
+            class="w-full border border-gray-300 rounded-lg min-h-10 p-2 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
           @if (email?.invalid && (email?.dirty || email?.touched)) {
-          <div class="error">
+          <div class="error mt-1">
             @if (email?.errors?.['required']) { <small class="text-error">Required</small> }
             @if (email?.errors?.['email']) { <small class="text-error">invalid email</small> }
-            @if (email?.errors?.['serverError']) { <small class="text-error">{{email?.errors?.['serverError']}}</small> }
+            @if (email?.errors?.['serverError']) { <small class="text-error">{{email?.errors?.['serverError']}}</small>
+            }
           </div>
           }
         </div>
         <div>
-          <label for="email" class="block">password</label>
-          <input type="password" name="password" formControlName="password" class="w-full border rounded-lg min-h-8">
+          <label for="password" class="block font-medium mb-1">password</label>
+          <div class="relative">
+            <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+              class="w-full border border-gray-300 rounded-lg min-h-10 p-2 pr-10 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+            <button type="button" (click)="togglePassword()"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+              @if (showPassword) {
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-5 h-5 text-gray-500 hover:text-gray-700">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
+              } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-5 h-5 text-gray-500 hover:text-gray-700">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              </svg>
+              }
+            </button>
+          </div>
           @if (password?.invalid && (password?.dirty || password?.touched)) {
-          <small class="text-error">required</small>
+          <small class="text-error mt-1 block">required</small>
           }
         </div>
 
         <button type="submit"
-          class=" w-full px-4 py-2 rounded-xl text-sm font-semibold text-white no-underline bg-primary hover:bg-primaryHover transition-all">Login</button>
+          class="w-full px-4 py-2 mt-2 rounded-xl text-md font-semibold text-white no-underline bg-primary hover:bg-primaryHover transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary outline-none">Login</button>
       </form>
+      <p class="mt-6 text-center text-sm text-gray-600">
+        Don't have an account? <a routerLink="/register" class="text-primary font-semibold hover:underline">Sign up
+          now</a>
+      </p>
     </div>
   </div>
 </div>

@@ -1,0 +1,83 @@
+<div class="mt-8">
+
+  <!-- Rating Summary -->
+  <div class="flex items-center gap-3 mb-6">
+    <span class="text-3xl font-bold text-primary">{{ avgRating }}</span>
+    <div>
+      <div class="flex gap-1">
+        <span *ngFor="let star of [1,2,3,4,5]"
+          [class]="star <= avgRating ? 'text-yellow-400' : 'text-gray-300'"
+          class="text-xl">★</span>
+      </div>
+      <p class="text-sm text-textSub">{{ totalReviews }} reviews</p>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="text-center py-6 text-textSub">
+    Loading reviews...
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage" class="bg-red-50 text-red-500 text-sm p-3 rounded mb-4">
+    {{ errorMessage }}
+  </div>
+
+  <!-- No Reviews -->
+  <div *ngIf="!isLoading && reviews.length === 0" class="text-textSub text-sm py-4">
+    No reviews yet. Be the first to review!
+  </div>
+
+  <!-- Reviews List -->
+  <div *ngFor="let review of reviews" class="border-b border-gray-100 py-4">
+
+    <!-- User & Rating -->
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
+          {{ review.user_id?.firstname?.charAt(0).toUpperCase() }}
+        </div>
+        <span class="font-medium text-textMain">
+          {{ review.user_id?.firstname }} {{ review.user_id?.lastname }}
+        </span>
+      </div>
+      <!-- Stars -->
+      <div class="flex gap-1">
+        <span *ngFor="let star of [1,2,3,4,5]"
+          [class]="star <= review.rating ? 'text-yellow-400' : 'text-gray-300'"
+          class="text-sm">★</span>
+      </div>
+    </div>
+
+    <!-- Comment -->
+    <p *ngIf="review.comment" class="text-textSub text-sm">
+      {{ review.comment }}
+    </p>
+
+    <!-- Date -->
+    <p class="text-xs text-gray-400 mt-1">
+      {{ review.createdAt | date:'mediumDate' }}
+    </p>
+
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="totalPages > 1" class="flex justify-center gap-4 mt-6">
+    <button
+      (click)="prevPage()"
+      [disabled]="currentPage === 1"
+      class="px-4 py-2 rounded bg-gray-100 text-textMain disabled:opacity-40">
+      Previous
+    </button>
+    <span class="py-2 text-textSub text-sm">
+      {{ currentPage }} / {{ totalPages }}
+    </span>
+    <button
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages"
+      class="px-4 py-2 rounded bg-primary text-white disabled:opacity-40">
+      Next
+    </button>
+  </div>
+
+</div>
