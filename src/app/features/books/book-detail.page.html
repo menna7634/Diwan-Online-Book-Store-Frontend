@@ -19,9 +19,9 @@
           <img *ngIf="book.book_cover_url"
                [src]="book.book_cover_url"
                [alt]="book.book_title"
-               class="w-full h-full object-cover" />
+            class="w-full h-full object-cover" />
           <div *ngIf="!book.book_cover_url"
-               class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+            class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
             No cover
           </div>
         </div>
@@ -58,6 +58,21 @@
           </button>
           <p *ngIf="addToCartError" class="text-sm text-error">{{ addToCartError }}</p>
           <p *ngIf="book.stock < 1" class="text-sm text-textSub">Out of stock.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews -->
+    <div *ngIf="!isLoading && !errorMessage && book" class="flex flex-col gap-8 w-full mt-8 mb-24">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Add Review Form -->
+        <div class="col-span-1 lg:col-span-5 border border-gray-100 rounded-2xl p-6 bg-white h-fit shadow-sm">
+          <app-review-form [bookId]="book._id" (reviewAdded)="reviewList.loadReviews()"></app-review-form>
+        </div>
+
+        <!-- Reviews List -->
+        <div class="col-span-1 lg:col-span-7 border border-gray-100 rounded-2xl p-6 bg-white shadow-sm">
+          <app-review-list #reviewList [bookId]="book._id"></app-review-list>
         </div>
       </div>
     </div>

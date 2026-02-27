@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoryService, Category } from '../../../services/category.service';
@@ -29,7 +29,10 @@ export class CategoriesPage implements OnInit {
   showDeleteModal = false;
   categoryToDelete: string | null = null;
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(
+    private categoryService: CategoryService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.loadCategories();
@@ -49,11 +52,13 @@ export class CategoriesPage implements OnInit {
           this.totalItems = res.pagination.total;
         }
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.error = 'can not load categories. Please try again.';
         this.isLoading = false;
         console.error('Error loading categories:', err);
+        this.cdr.detectChanges();
       },
     });
   }
@@ -81,10 +86,12 @@ export class CategoriesPage implements OnInit {
             this.successMessage = 'Category updated successfully';
             this.resetForm();
             this.loadCategories(this.currentPage);
+            this.cdr.detectChanges();
           },
           error: (err) => {
             this.error = err.error?.details || err.error?.message || 'Failed to update category';
             this.isLoading = false;
+            this.cdr.detectChanges();
           },
         });
     } else {
@@ -93,10 +100,12 @@ export class CategoriesPage implements OnInit {
           this.successMessage = 'Category created successfully';
           this.resetForm();
           this.loadCategories(1);
+          this.cdr.detectChanges();
         },
         error: (err) => {
           this.error = err.error?.details || err.error?.message || 'Failed to create category';
           this.isLoading = false;
+          this.cdr.detectChanges();
         },
       });
     }
@@ -133,11 +142,13 @@ export class CategoriesPage implements OnInit {
         } else {
           this.loadCategories(this.currentPage);
         }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.error = 'It might be in use.';
         this.isLoading = false;
         this.categoryToDelete = null;
+        this.cdr.detectChanges();
       },
     });
   }

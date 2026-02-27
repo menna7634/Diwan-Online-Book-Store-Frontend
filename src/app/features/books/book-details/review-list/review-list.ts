@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReviewService } from '../../../../core/services/review';
 
@@ -19,7 +19,10 @@ export class ReviewListComponent implements OnInit {
   isLoading: boolean = false;
   errorMessage: string = '';
 
-  constructor(private reviewService: ReviewService) {}
+  constructor(
+    private reviewService: ReviewService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.loadReviews();
@@ -36,10 +39,12 @@ export class ReviewListComponent implements OnInit {
         this.totalReviews = res.data.totalReviews;
         this.totalPages = res.data.pagination.totalPages;
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.errorMessage = 'Failed to load reviews';
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
     });
   }

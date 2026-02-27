@@ -4,11 +4,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BookService } from '../../core/services/book.service';
 import { CartService } from '../../core/services/cart.service';
 import { Book } from '../../core/types/book';
+import { ReviewFormComponent } from './book-details/review-form/review-form';
+import { ReviewListComponent } from './book-details/review-list/review-list';
 
 @Component({
   selector: 'app-book-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ReviewFormComponent, ReviewListComponent],
   templateUrl: './book-detail.page.html',
 })
 export class BookDetailPage implements OnInit {
