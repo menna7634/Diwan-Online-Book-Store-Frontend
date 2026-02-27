@@ -4,72 +4,136 @@
       <h1 class="text-3xl font-extrabold text-textMain tracking-tight">All Books</h1>
     </div>
 
-    <div *ngIf="isLoading" class="text-textSub">
-      Loading books...
-    </div>
+    <div class="flex flex-col md:flex-row gap-8">
+      <!-- Main list -->
+      <div class="flex-1 flex flex-col gap-6">
+        <div *ngIf="isLoading" class="text-textSub">
+          Loading books...
+        </div>
 
-    <div *ngIf="!isLoading && errorMessage" class="text-error">
-      {{ errorMessage }}
-    </div>
+        <div *ngIf="!isLoading && errorMessage" class="text-error">
+          {{ errorMessage }}
+        </div>
 
-    <div *ngIf="!isLoading && !errorMessage && books.length === 0" class="text-textSub">
-      No books found.
-    </div>
+        <div *ngIf="!isLoading && !errorMessage && books.length === 0" class="text-textSub">
+          No books found.
+        </div>
 
-    <div *ngIf="!isLoading && !errorMessage && books.length > 0"
-         class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      <div *ngFor="let book of books"
-           class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col h-full cursor-pointer">
-        <div class="h-64 bg-gray-100 w-full relative overflow-hidden flex items-center justify-center p-6">
-          <img *ngIf="book.book_cover_url"
-               [src]="book.book_cover_url"
-               [alt]="book.book_title"
-               class="w-full h-full object-cover rounded" />
-          <div *ngIf="!book.book_cover_url"
-               class="w-full h-full bg-gray-200 rounded shadow-sm flex items-center justify-center text-gray-400">
-            No cover
+        <div *ngIf="!isLoading && !errorMessage && books.length > 0"
+             class="grid grid-cols-2 md:grid-cols-3 gap-6">
+          <div *ngFor="let book of books"
+               class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col h-full cursor-pointer">
+            <div class="h-64 bg-gray-100 w-full relative overflow-hidden flex items-center justify-center p-6">
+              <img *ngIf="book.book_cover_url"
+                   [src]="book.book_cover_url"
+                   [alt]="book.book_title"
+                   class="w-full h-full object-cover rounded" />
+              <div *ngIf="!book.book_cover_url"
+                   class="w-full h-full bg-gray-200 rounded shadow-sm flex items-center justify-center text-gray-400">
+                No cover
+              </div>
+            </div>
+
+            <div class="p-5 flex flex-col flex-grow">
+              <h3
+                class="font-bold text-textMain text-base leading-snug line-clamp-2 md:h-12 mb-1 group-hover:text-primary transition-colors">
+                {{ book.book_title }}
+              </h3>
+
+              <div class="mt-auto flex items-center justify-between">
+                <span class="font-extrabold text-lg text-price">
+                  {{ book.price | currency }}
+                </span>
+                <span class="text-xs text-textSub">
+                  In stock: {{ book.stock }}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="p-5 flex flex-col flex-grow">
-          <h3
-            class="font-bold text-textMain text-base leading-snug line-clamp-2 md:h-12 mb-1 group-hover:text-primary transition-colors">
-            {{ book.book_title }}
-          </h3>
+        <div *ngIf="pagination && pagination.totalPages > 1"
+             class="flex items-center justify-between mt-4">
+          <button
+            type="button"
+            (click)="previousPage()"
+            [disabled]="!pagination.hasPrevPage"
+            class="px-4 py-2 rounded-xl text-sm font-semibold no-underline bg-white border border-gray-200 text-textMain hover:bg-gray-50 disabled:opacity-50">
+            Previous
+          </button>
 
-          <div class="mt-auto flex items-center justify-between">
-            <span class="font-extrabold text-lg text-price">
-              {{ book.price | currency }}
-            </span>
-            <span class="text-xs text-textSub">
-              In stock: {{ book.stock }}
-            </span>
-          </div>
+          <span class="text-sm text-textSub">
+            Page {{ pagination.page }} of {{ pagination.totalPages }}
+          </span>
+
+          <button
+            type="button"
+            (click)="nextPage()"
+            [disabled]="!pagination.hasNextPage"
+            class="px-4 py-2 rounded-xl text-sm font-semibold text-white no-underline bg-primary hover:bg-primaryHover disabled:opacity-50">
+            Next
+          </button>
         </div>
       </div>
-    </div>
 
-    <div *ngIf="pagination && pagination.totalPages > 1"
-         class="flex items-center justify-between mt-4">
-      <button
-        type="button"
-        (click)="previousPage()"
-        [disabled]="!pagination.hasPrevPage"
-        class="px-4 py-2 rounded-xl text-sm font-semibold no-underline bg-white border border-gray-200 text-textMain hover:bg-gray-50 disabled:opacity-50">
-        Previous
-      </button>
+      <!-- Filters sidebar -->
+      <aside class="w-full md:w-64 bg-white border border-gray-100 rounded-2xl p-4 h-fit">
+        <h2 class="text-lg font-semibold text-textMain mb-4">Filters</h2>
 
-      <span class="text-sm text-textSub">
-        Page {{ pagination.page }} of {{ pagination.totalPages }}
-      </span>
+        <div class="flex flex-col gap-4 text-sm">
+          <div>
+            <label class="block font-medium mb-1">Search</label>
+            <input
+              type="text"
+              [(ngModel)]="search"
+              class="w-full border border-gray-300 rounded-lg min-h-9 px-2 py-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" />
+          </div>
 
-      <button
-        type="button"
-        (click)="nextPage()"
-        [disabled]="!pagination.hasNextPage"
-        class="px-4 py-2 rounded-xl text-sm font-semibold text-white no-underline bg-primary hover:bg-primaryHover disabled:opacity-50">
-        Next
-      </button>
+          <div class="flex gap-2">
+            <div class="flex-1">
+              <label class="block font-medium mb-1">Min price</label>
+              <input
+                type="number"
+                [(ngModel)]="minPrice"
+                class="w-full border border-gray-300 rounded-lg min-h-9 px-2 py-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" />
+            </div>
+            <div class="flex-1">
+              <label class="block font-medium mb-1">Max price</label>
+              <input
+                type="number"
+                [(ngModel)]="maxPrice"
+                class="w-full border border-gray-300 rounded-lg min-h-9 px-2 py-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-medium mb-1">Sort by</label>
+            <select
+              [(ngModel)]="sortOption"
+              class="w-full border border-gray-300 rounded-lg min-h-9 px-2 py-1 bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+              <option value="priceLowHigh">Price: Low to High</option>
+              <option value="priceHighLow">Price: High to Low</option>
+            </select>
+          </div>
+
+          <div class="flex gap-2 mt-2">
+            <button
+              type="button"
+              (click)="clearFilters()"
+              class="flex-1 px-3 py-2 rounded-xl text-sm font-semibold no-underline bg-white border border-gray-200 text-textMain hover:bg-gray-50">
+              Clear
+            </button>
+            <button
+              type="button"
+              (click)="applyFilters()"
+              class="flex-1 px-3 py-2 rounded-xl text-sm font-semibold text-white no-underline bg-primary hover:bg-primaryHover">
+              Apply
+            </button>
+          </div>
+        </div>
+      </aside>
     </div>
   </div>
 </div>

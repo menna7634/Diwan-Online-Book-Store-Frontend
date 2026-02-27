@@ -33,5 +33,9 @@ export interface BooksQueryParams {
   search?: string;
   page?: number;
   limit?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  sort?: 'price' | 'createdAt';
+  order?: 'asc' | 'desc';
 }
 

@@ -25,6 +25,18 @@ export class BookService {
     if (params?.limit) {
       httpParams = httpParams.set('limit', params.limit.toString());
     }
+    if (params?.minPrice !== undefined) {
+      httpParams = httpParams.set('minPrice', params.minPrice.toString());
+    }
+    if (params?.maxPrice !== undefined) {
+      httpParams = httpParams.set('maxPrice', params.maxPrice.toString());
+    }
+    if (params?.sort) {
+      httpParams = httpParams.set('sort', params.sort);
+    }
+    if (params?.order) {
+      httpParams = httpParams.set('order', params.order);
+    }
 
     // HttpClient has a get<t> function 
     return this.http.get<BooksListResponse>(`${this.baseUrl}/books`, {
