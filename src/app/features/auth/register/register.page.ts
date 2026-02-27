@@ -33,7 +33,7 @@ const noFutureDateValidator: ValidatorFn = (control: AbstractControl) => {
 };
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, KeyValuePipe, AsyncPipe, RouterLink],
+  imports: [ReactiveFormsModule, KeyValuePipe, AsyncPipe,RouterLink],
   templateUrl: './register.page.html',
 })
 export class RegisterPage {
