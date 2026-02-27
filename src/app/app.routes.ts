@@ -13,6 +13,7 @@ import { isadminGuard } from './core/guards/isadmin-guard';
 import { ProfilePage } from './core/features/auth/profile/profile.page';
 import { authGuardGuard } from './core/guards/auth.guard-guard';
 import { VerifyPage } from './core/features/auth/verify/verify.page';
+import { NotFoundComponent } from './core/features/not-found/not-found';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -83,4 +84,5 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/orders/orders.component').then((m) => m.OrdersComponent),
   },
+  { path: '**', component: NotFoundComponent }
 ];
