@@ -12,6 +12,7 @@ import { BooksPage } from './core/features/admin/books/books.page';
 import { isadminGuard } from './core/guards/isadmin-guard';
 import { ProfilePage } from './core/features/auth/profile/profile.page';
 import { authGuardGuard } from './core/guards/auth.guard-guard';
+import { VerifyPage } from './core/features/auth/verify/verify.page';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -29,6 +30,11 @@ export const routes: Routes = [
     path: 'profile',
     component: ProfilePage,
     canActivate: [authGuardGuard],
+  },
+  {
+    path: 'verify-email',
+    component: VerifyPage,
+    canActivate: [guestGuard],
   },
   {
     path: 'admin',
