@@ -26,6 +26,9 @@ export class CategoriesPage implements OnInit {
     name: '',
   };
 
+  showDeleteModal = false;
+  categoryToDelete: string | null = null;
+
   constructor(private categoryService: CategoryService) {}
 
   ngOnInit(): void {
@@ -109,26 +112,39 @@ export class CategoriesPage implements OnInit {
   }
 
   deleteCategory(id: string): void {
-    if (confirm('Are you sure you want to delete this category?')) {
-      this.isLoading = true;
-      this.error = '';
-      this.successMessage = '';
+    this.categoryToDelete = id;
+    this.showDeleteModal = true;
+  }
 
-      this.categoryService.deleteCategory(id).subscribe({
-        next: () => {
-          this.successMessage = 'Category deleted successfully';
-          if (this.categories.length === 1 && this.currentPage > 1) {
-            this.loadCategories(this.currentPage - 1);
-          } else {
-            this.loadCategories(this.currentPage);
-          }
-        },
-        error: (err) => {
-          this.error = 'It might be in use.';
-          this.isLoading = false;
-        },
-      });
-    }
+  confirmDelete(): void {
+    if (!this.categoryToDelete) return;
+
+    this.isLoading = true;
+    this.error = '';
+    this.successMessage = '';
+    this.showDeleteModal = false;
+
+    this.categoryService.deleteCategory(this.categoryToDelete).subscribe({
+      next: () => {
+        this.successMessage = 'Category deleted successfully';
+        this.categoryToDelete = null;
+        if (this.categories.length === 1 && this.currentPage > 1) {
+          this.loadCategories(this.currentPage - 1);
+        } else {
+          this.loadCategories(this.currentPage);
+        }
+      },
+      error: (err) => {
+        this.error = 'It might be in use.';
+        this.isLoading = false;
+        this.categoryToDelete = null;
+      },
+    });
+  }
+
+  cancelDelete(): void {
+    this.showDeleteModal = false;
+    this.categoryToDelete = null;
   }
 
   cancelEdit(): void {
