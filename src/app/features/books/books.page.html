@@ -1,0 +1,76 @@
+<div class="bg-light min-h-[calc(100vh-80px)] flex flex-col pt-16">
+  <div class="max-w-6xl mx-auto px-6 w-full flex flex-col gap-8">
+    <div class="flex items-center justify-between">
+      <h1 class="text-3xl font-extrabold text-textMain tracking-tight">All Books</h1>
+    </div>
+
+    <div *ngIf="isLoading" class="text-textSub">
+      Loading books...
+    </div>
+
+    <div *ngIf="!isLoading && errorMessage" class="text-error">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && books.length === 0" class="text-textSub">
+      No books found.
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && books.length > 0"
+         class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div *ngFor="let book of books"
+           class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col h-full cursor-pointer">
+        <div class="h-64 bg-gray-100 w-full relative overflow-hidden flex items-center justify-center p-6">
+          <img *ngIf="book.book_cover_url"
+               [src]="book.book_cover_url"
+               [alt]="book.book_title"
+               class="w-full h-full object-cover rounded" />
+          <div *ngIf="!book.book_cover_url"
+               class="w-full h-full bg-gray-200 rounded shadow-sm flex items-center justify-center text-gray-400">
+            No cover
+          </div>
+        </div>
+
+        <div class="p-5 flex flex-col flex-grow">
+          <h3
+            class="font-bold text-textMain text-base leading-snug line-clamp-2 md:h-12 mb-1 group-hover:text-primary transition-colors">
+            {{ book.book_title }}
+          </h3>
+
+          <div class="mt-auto flex items-center justify-between">
+            <span class="font-extrabold text-lg text-price">
+              {{ book.price | currency }}
+            </span>
+            <span class="text-xs text-textSub">
+              In stock: {{ book.stock }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="pagination && pagination.totalPages > 1"
+         class="flex items-center justify-between mt-4">
+      <button
+        type="button"
+        (click)="previousPage()"
+        [disabled]="!pagination.hasPrevPage"
+        class="px-4 py-2 rounded-xl text-sm font-semibold no-underline bg-white border border-gray-200 text-textMain hover:bg-gray-50 disabled:opacity-50">
+        Previous
+      </button>
+
+      <span class="text-sm text-textSub">
+        Page {{ pagination.page }} of {{ pagination.totalPages }}
+      </span>
+
+      <button
+        type="button"
+        (click)="nextPage()"
+        [disabled]="!pagination.hasNextPage"
+        class="px-4 py-2 rounded-xl text-sm font-semibold text-white no-underline bg-primary hover:bg-primaryHover disabled:opacity-50">
+        Next
+      </button>
+    </div>
+  </div>
+</div>
+

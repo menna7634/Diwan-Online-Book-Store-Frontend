@@ -24,6 +24,11 @@ export const routes: Routes = [
     canActivate: [guestGuard],
   },
   {
+    path: 'books',
+    loadComponent: () =>
+      import('./features/books/books.page').then((m) => m.BooksPage),
+  },
+  {
     path: 'admin',
     component: AdminPanelLayout,
     canActivate: [isadminGuard],
