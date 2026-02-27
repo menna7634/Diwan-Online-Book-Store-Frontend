@@ -7,7 +7,6 @@ import { FooterComponent } from "./shared/components/footer/footer.component";
   selector: 'app-root',
   imports: [RouterOutlet, NavbarComponent, FooterComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('Diwan');
