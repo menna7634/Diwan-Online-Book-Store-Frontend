@@ -3,7 +3,7 @@ import { BehaviorSubject, catchError, finalize, map, Observable, of, switchMap, 
 import { User } from '../types/user';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { RegisterationRequestBody } from '../types/auth';
+import { RegisterationRequestBody, UpdateProfileRequestBody } from '../types/auth';
 
 interface AuthResponse {
   access_token: string;
@@ -32,8 +32,13 @@ export class AuthService {
       tap((user) => this._user$.next(user))
     );
   }
-  getUserProfile() : Observable<User> {
-    return this.http.get<User>(`${environment.apiUrl}/profile`);
+  getUserProfile(): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/profile`)
+  }
+  updateUserProfile(data: UpdateProfileRequestBody): Observable<User> {
+    return this.http.post<User>(`${environment.apiUrl}/profile`, data).pipe(
+      tap(user => this._user$.next(user)),
+    );
   }
 
   logout(): Observable<any> {
@@ -45,8 +50,8 @@ export class AuthService {
     );
   }
 
-  hydrate() : Observable<User | null> {
-    if(!this.getAccessToken())
+  hydrate(): Observable<User | null> {
+    if (!this.getAccessToken())
       return of(null);
     return this.getUserProfile().pipe(
       tap(user => this._user$.next(user)),

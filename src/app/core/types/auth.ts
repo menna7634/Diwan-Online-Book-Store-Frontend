@@ -13,3 +13,15 @@ export interface RegisterationRequestBody {
     zipCode: string;
   }
 }
+export interface UpdateProfileRequestBody {
+  firstname?: string;
+  lastname?: string;
+  dob?: Date;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    zipCode?: string;
+  }
+}
