@@ -25,6 +25,9 @@ export class BookService {
     if (params?.limit) {
       httpParams = httpParams.set('limit', params.limit.toString());
     }
+    if (params?.authorIds) {
+      httpParams = httpParams.set('authorIds', params.authorIds);
+    }
     if (params?.minPrice !== undefined) {
       httpParams = httpParams.set('minPrice', params.minPrice.toString());
     }

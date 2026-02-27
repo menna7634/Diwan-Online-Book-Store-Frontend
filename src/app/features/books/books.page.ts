@@ -26,6 +26,7 @@ export class BooksPage implements OnInit {
 
   // simple filter state
   search = '';
+  authorIds: string | null = null;
   minPrice: number | null = null;
   maxPrice: number | null = null;
   sortOption: 'newest' | 'oldest' | 'priceLowHigh' | 'priceHighLow' = 'newest';
@@ -37,17 +38,19 @@ export class BooksPage implements OnInit {
       const limit = Number(params.get('limit')) || 12;
 
       const search = params.get('search') || '';
+      const authorIds = params.get('authorIds') || null;
       const minPriceParam = params.get('minPrice');
       const maxPriceParam = params.get('maxPrice');
       const sort = (params.get('sort') as 'price' | 'createdAt' | null) || null;
       const order = (params.get('order') as 'asc' | 'desc' | null) || null;
 
       this.search = search;
+      this.authorIds = authorIds;
       this.minPrice = minPriceParam !== null ? Number(minPriceParam) : null;
       this.maxPrice = maxPriceParam !== null ? Number(maxPriceParam) : null;
       this.sortOption = this.mapSortOrderToOption(sort, order);
 
-      this.loadBooks(page, limit, search, this.minPrice, this.maxPrice, sort, order);
+      this.loadBooks(page, limit, search, authorIds, this.minPrice, this.maxPrice, sort, order);
     });
   }
 
@@ -55,6 +58,7 @@ export class BooksPage implements OnInit {
     page: number,
     limit: number,
     search?: string,
+    authorIds?: string | null,
     minPrice?: number | null,
     maxPrice?: number | null,
     sort?: 'price' | 'createdAt' | null,
@@ -67,6 +71,7 @@ export class BooksPage implements OnInit {
       page,
       limit,
       search: search || undefined,
+      authorIds: authorIds || undefined,
       minPrice: minPrice ?? undefined,
       maxPrice: maxPrice ?? undefined,
       sort: sort || undefined,
@@ -93,6 +98,7 @@ export class BooksPage implements OnInit {
       queryParams: {
         page: 1,
         search: this.search || null,
+        authorIds: this.authorIds ?? null,
         minPrice: this.minPrice ?? null,
         maxPrice: this.maxPrice ?? null,
         sort,
@@ -104,6 +110,7 @@ export class BooksPage implements OnInit {
 
   clearFilters(): void {
     this.search = '';
+    this.authorIds = null;
     this.minPrice = null;
     this.maxPrice = null;
     this.sortOption = 'newest';
@@ -112,6 +119,7 @@ export class BooksPage implements OnInit {
       queryParams: {
         page: 1,
         search: null,
+        authorIds: null,
         minPrice: null,
         maxPrice: null,
         sort: null,

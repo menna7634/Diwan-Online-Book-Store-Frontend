@@ -133,15 +133,17 @@
 
             <div *ngIf="!isLoadingPopularAuthors && !popularAuthorsError && popularAuthors.length > 0"
                  class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                <div *ngFor="let author of popularAuthors"
-                     class="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col items-center text-center hover:border-primary/30 hover:shadow-lg transition-all cursor-pointer group">
+                <a *ngFor="let author of popularAuthors"
+                   [routerLink]="['/books']"
+                   [queryParams]="{ authorIds: author._id }"
+                   class="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col items-center text-center hover:border-primary/30 hover:shadow-lg transition-all cursor-pointer group no-underline text-inherit">
                     <div
                         class="w-24 h-24 rounded-full bg-gray-100 mb-4 overflow-hidden border-4 border-white shadow-sm flex items-center justify-center text-2xl font-bold text-primary group-hover:scale-105 transition-transform duration-300">
                         {{ author.name.charAt(0) }}
                     </div>
                     <h3 class="font-bold text-textMain text-lg">{{ author.name }}</h3>
                     <p *ngIf="author.bio" class="text-sm text-textSub mt-1 line-clamp-2">{{ author.bio }}</p>
-                </div>
+                </a>
             </div>
         </section>
 
