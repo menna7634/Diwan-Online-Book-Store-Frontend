@@ -21,13 +21,14 @@
 
         <div *ngIf="!isLoading && !errorMessage && books.length > 0"
              class="grid grid-cols-2 md:grid-cols-3 gap-6">
-          <div *ngFor="let book of books"
-               class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col h-full cursor-pointer">
-            <div class="h-64 bg-gray-100 w-full relative overflow-hidden flex items-center justify-center p-6">
+          <a *ngFor="let book of books"
+             [routerLink]="['/books', book._id]"
+             class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col h-full cursor-pointer no-underline text-inherit">
+            <div class="h-64 bg-gray-100 w-full relative flex items-center justify-center p-2">
               <img *ngIf="book.book_cover_url"
                    [src]="book.book_cover_url"
                    [alt]="book.book_title"
-                   class="w-full h-full object-cover rounded" />
+                   class="w-full h-full object-contain rounded" />
               <div *ngIf="!book.book_cover_url"
                    class="w-full h-full bg-gray-200 rounded shadow-sm flex items-center justify-center text-gray-400">
                 No cover
@@ -49,7 +50,7 @@
                 </span>
               </div>
             </div>
-          </div>
+          </a>
         </div>
 
         <div *ngIf="pagination && pagination.totalPages > 1"

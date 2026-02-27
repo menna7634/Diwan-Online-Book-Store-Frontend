@@ -24,6 +24,11 @@ export const routes: Routes = [
     canActivate: [guestGuard],
   },
   {
+    path: 'books/:id',
+    loadComponent: () =>
+      import('./features/books/book-detail.page').then((m) => m.BookDetailPage),
+  },
+  {
     path: 'books',
     loadComponent: () =>
       import('./features/books/books.page').then((m) => m.BooksPage),

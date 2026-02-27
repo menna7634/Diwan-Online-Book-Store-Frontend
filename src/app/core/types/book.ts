@@ -3,6 +3,7 @@ export interface Book {
   author_id: string;
   categories: string[];
   book_title: string;
+  description?: string;
   book_cover_url?: string;
   price: number;
   stock: number;
