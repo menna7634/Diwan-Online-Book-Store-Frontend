@@ -37,6 +37,8 @@ export const routes: Routes = [
     path: 'books',
     loadComponent: () =>
       import('./features/books/books.page').then((m) => m.BooksPage),
+  },
+  {
     path: 'profile',
     component: ProfilePage,
     canActivate: [authGuardGuard],
