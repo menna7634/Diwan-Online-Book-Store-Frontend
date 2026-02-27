@@ -35,6 +35,10 @@ export class AuthService {
   getUserProfile(): Observable<User> {
     return this.http.get<User>(`${environment.apiUrl}/profile`)
   }
+
+  verify(token: string): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/auth/verify?token=${token}`);
+  }
   updateUserProfile(data: UpdateProfileRequestBody): Observable<User> {
     return this.http.post<User>(`${environment.apiUrl}/profile`, data).pipe(
       tap(user => this._user$.next(user)),
