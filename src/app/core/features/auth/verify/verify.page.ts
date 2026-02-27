@@ -27,7 +27,7 @@ export class VerifyPage implements OnInit {
       },
       error: (err) => {
         this.status.set('error');
-        this.errorMessage.set(err.error.message);
+        this.errorMessage.set(err.error?.message || err.message);
       }
     })
   }
