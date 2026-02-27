@@ -10,6 +10,10 @@ import { AuthorsPage } from './core/features/admin/authors/authors.page';
 import { CategoriesPage } from './core/features/admin/categories/categories.page';
 import { BooksPage } from './core/features/admin/books/books.page';
 import { isadminGuard } from './core/guards/isadmin-guard';
+import { ProfilePage } from './core/features/auth/profile/profile.page';
+import { authGuardGuard } from './core/guards/auth.guard-guard';
+import { VerifyPage } from './core/features/auth/verify/verify.page';
+import { NotFoundComponent } from './core/features/not-found/not-found';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -21,6 +25,16 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterPage,
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'profile',
+    component: ProfilePage,
+    canActivate: [authGuardGuard],
+  },
+  {
+    path: 'verify-email',
+    component: VerifyPage,
     canActivate: [guestGuard],
   },
   {
@@ -70,4 +84,5 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/orders/orders.component').then((m) => m.OrdersComponent),
   },
+  { path: '**', component: NotFoundComponent }
 ];
