@@ -139,8 +139,8 @@ export class CartService {
     return this.http.get<any>(`${this.API}/order/my`, { params: { page, limit } }).pipe(
       map((res) => ({
         data: res.data as Order[],
-        totalPages: res.totalPages ?? 1,
-        currentPage: res.currentPage ?? 1,
+        totalPages: res.pagination?.totalPages ?? 1,
+        currentPage: res.pagination?.page ?? 1,
       })),
     );
   }

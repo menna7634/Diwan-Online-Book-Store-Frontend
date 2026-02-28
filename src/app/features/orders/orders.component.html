@@ -94,7 +94,7 @@
               </span>
             </div>
             <span class="text-xs text-gray-400">
-              {{ order.createdAt | date: 'MMM d, y · h:mm a' }}
+              {{ order.createdAt | date: 'MMM d, y · h:mm a' : '+0200' }}
             </span>
           </div>
 
@@ -259,7 +259,7 @@
                   <span class="font-semibold text-gray-700">{{ h.status | titlecase }}</span>
                   <span *ngIf="h.note" class="text-gray-400 ml-2">— {{ h.note }}</span>
                   <p *ngIf="h.createdAt" class="text-xs text-gray-400">
-                    {{ h.createdAt | date: 'MMM d, y · h:mm a' }}
+                    {{ h.createdAt | date: 'MMM d, y · h:mm a' : '+0200' }}
                   </p>
                 </div>
               </div>
