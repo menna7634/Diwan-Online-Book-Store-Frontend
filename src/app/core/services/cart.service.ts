@@ -10,10 +10,11 @@ import {
   Order,
   PlaceOrderRequest,
 } from '../types/cart.types';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  private readonly API = 'https://diwan-book-store-backend-production.up.railway.app';
+  private readonly API = environment.apiUrl;
 
   private http = inject(HttpClient);
 
