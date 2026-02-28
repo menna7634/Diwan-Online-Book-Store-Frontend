@@ -191,7 +191,7 @@
                             placeholder="Enter book title">
                     </div>
 
-                    <!-- Author dropdown -->
+                    <!-- Author -->
                     <div>
                         <label class="text-sm font-medium text-textSub block mb-1">Author *</label>
                         <select [(ngModel)]="bookAuthorId" name="bookAuthorId"
@@ -201,7 +201,7 @@
                         </select>
                     </div>
 
-                    <!-- Categories checkboxes -->
+                    <!-- Categories -->
                     <div>
                         <label class="text-sm font-medium text-textSub block mb-1">Categories *</label>
                         <div
@@ -216,7 +216,7 @@
                         </div>
                     </div>
 
-                    <!-- Price and Stock side by side -->
+                    <!-- Price and Stock-->
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="text-sm font-medium text-textSub block mb-1">Price *</label>
@@ -243,7 +243,6 @@
                     <!-- Cover image upload -->
                     <div>
                         <label class="text-sm font-medium text-textSub block mb-1">Cover Image</label>
-                        <!-- Show preview if we have one -->
                         <div *ngIf="imagePreview" class="mb-2 relative inline-block">
                             <img [src]="imagePreview" alt="Preview"
                                 class="w-16 h-22 object-cover rounded border border-gray-200">
