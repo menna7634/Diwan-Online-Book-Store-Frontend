@@ -82,7 +82,7 @@ export class BooksPage implements OnInit {
         this.cdr.detectChanges();
       },
       error: () => {
-        this.errorMessage = 'Could not load books. Please try again.';
+        this.errorMessage = 'Could not load books. Try again.';
         this.isLoading = false;
         this.cdr.detectChanges();
       },
