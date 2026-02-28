@@ -48,17 +48,14 @@ export class OrdersComponent implements OnInit {
     return o._id;
   }
 
-  /** Get cover URL from an OrderBook */
   bookCover(book: OrderBook): string {
     return typeof book.book_id === 'object' ? (book.book_id.book_cover_url ?? '') : '';
   }
 
-  /** Get title from an OrderBook (populated or fallback to stored name) */
   bookTitle(book: OrderBook): string {
     return typeof book.book_id === 'object' ? book.book_id.book_title : book.name;
   }
 
-  /** Calculate order total — must live in component, not template (no arrow fns in Angular expressions) */
   getOrderTotal(order: Order): string {
     return order.books.reduce((s, b) => s + b.price * b.quantity, 0).toFixed(2);
   }
@@ -67,7 +64,6 @@ export class OrdersComponent implements OnInit {
     return Array.isArray(order.order_history) && order.order_history.length > 0;
   }
 
-  /** Tailwind classes per order_status */
   statusClass(status: OrderStatus): string {
     const map: Record<OrderStatus, string> = {
       placed: 'bg-yellow-100 text-yellow-700',

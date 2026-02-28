@@ -1,5 +1,4 @@
 <div class="min-h-screen bg-gray-50">
-  <!-- ── Header ──────────────────────────────────────────────────────────── -->
   <div class="bg-white border-b border-gray-100">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <a
@@ -58,7 +57,7 @@
     </div>
   </div>
 
-  <!-- ── Success ──────────────────────────────────────────────────────────── -->
+  <!-- Success  -->
   <div
     *ngIf="orderPlaced"
     class="max-w-lg mx-auto px-4 py-20 text-center flex flex-col items-center gap-4"
@@ -97,7 +96,6 @@
     </div>
   </div>
 
-  <!-- ── Form + Summary ───────────────────────────────────────────────────── -->
   <div *ngIf="!orderPlaced" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
       <!-- Left: Form -->
@@ -271,7 +269,7 @@
             </label>
           </div>
 
-          <!-- Card Fields (UI only - integrate your payment gateway here) -->
+          <!-- Card Fields  -->
           <div *ngIf="selectedPayment === 'card'" class="mt-5 flex flex-col gap-4">
             <div class="flex flex-col gap-1.5">
               <label class="text-xs font-semibold text-gray-700 uppercase tracking-wider"
@@ -387,7 +385,6 @@
             </div>
           </div>
 
-          <!-- Address preview in step 2 -->
           <div
             *ngIf="currentStep === 2 && isAddressValid()"
             class="mt-4 p-3 bg-gray-50 rounded-xl text-xs text-gray-500 flex flex-col gap-0.5"
