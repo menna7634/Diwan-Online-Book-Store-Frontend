@@ -5,8 +5,7 @@
     <span class="text-3xl font-bold text-primary">{{ avgRating }}</span>
     <div>
       <div class="flex gap-1">
-        <span *ngFor="let star of [1,2,3,4,5]"
-          [class]="star <= avgRating ? 'text-yellow-400' : 'text-gray-300'"
+        <span *ngFor="let star of [1,2,3,4,5]" [class]="star <= avgRating ? 'text-yellow-400' : 'text-gray-300'"
           class="text-xl">★</span>
       </div>
       <p class="text-sm text-textSub">{{ totalReviews }} reviews</p>
@@ -41,11 +40,18 @@
           {{ review.user_id?.firstname }} {{ review.user_id?.lastname }}
         </span>
       </div>
-      <!-- Stars -->
-      <div class="flex gap-1">
-        <span *ngFor="let star of [1,2,3,4,5]"
-          [class]="star <= review.rating ? 'text-yellow-400' : 'text-gray-300'"
-          class="text-sm">★</span>
+      <!-- Stars + Delete button -->
+      <div class="flex items-center gap-2">
+        <div class="flex gap-1">
+          <span *ngFor="let star of [1,2,3,4,5]" [class]="star <= review.rating ? 'text-yellow-400' : 'text-gray-300'"
+            class="text-sm">★</span>
+        </div>
+        <!-- show delete only for the user's own review -->
+        <button *ngIf="currentUserId && review.user_id?._id === currentUserId" (click)="deleteReview(review._id)"
+          class="ml-2 text-xs text-red-400 hover:text-red-600 transition-colors focus:outline-none"
+          title="Delete your review">
+          Delete
+        </button>
       </div>
     </div>
 
@@ -63,18 +69,14 @@
 
   <!-- Pagination -->
   <div *ngIf="totalPages > 1" class="flex justify-center gap-4 mt-6">
-    <button
-      (click)="prevPage()"
-      [disabled]="currentPage === 1"
+    <button (click)="prevPage()" [disabled]="currentPage === 1"
       class="px-4 py-2 rounded bg-gray-100 text-textMain disabled:opacity-40">
       Previous
     </button>
     <span class="py-2 text-textSub text-sm">
       {{ currentPage }} / {{ totalPages }}
     </span>
-    <button
-      (click)="nextPage()"
-      [disabled]="currentPage === totalPages"
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages"
       class="px-4 py-2 rounded bg-primary text-white disabled:opacity-40">
       Next
     </button>

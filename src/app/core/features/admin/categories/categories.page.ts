@@ -166,10 +166,12 @@ export class CategoriesPage implements OnInit {
     this.isEditing = false;
     this.currentCategoryId = '';
     this.categoryForm = { name: '' };
+    this.isLoading = false;
     setTimeout(() => {
       this.successMessage = '';
       this.error = '';
-    }, 5000);
+      this.cdr.detectChanges();
+    }, 3000);
   }
 
   changePage(page: number): void {

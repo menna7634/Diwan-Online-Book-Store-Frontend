@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReviewService } from '../../../../core/services/review';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-review-list',
@@ -18,13 +19,19 @@ export class ReviewListComponent implements OnInit {
   totalPages: number = 1;
   isLoading: boolean = false;
   errorMessage: string = '';
+  currentUserId: string = '';
 
   constructor(
     private reviewService: ReviewService,
+    private authService: AuthService,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
+    this.authService.user$.subscribe((user) => {
+      this.currentUserId = user?._id || '';
+      this.cdr.detectChanges();
+    });
     this.loadReviews();
   }
 
@@ -42,7 +49,7 @@ export class ReviewListComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: () => {
-        this.errorMessage = 'Failed to load reviews';
+        this.errorMessage = 'Failed to load reviews.';
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -63,7 +70,16 @@ export class ReviewListComponent implements OnInit {
     }
   }
 
-  onReviewDeleted(): void {
-    this.loadReviews();
+  deleteReview(reviewId: string): void {
+    this.reviewService.deleteReview(reviewId).subscribe({
+      next: () => {
+        this.loadReviews();
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.errorMessage = 'Failed to delete review.';
+        this.cdr.detectChanges();
+      },
+    });
   }
 }
