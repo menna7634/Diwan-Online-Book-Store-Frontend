@@ -1,8 +1,18 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { AuthorsListResponse } from '../types/author';
+import { Author, AuthorsListResponse } from '../types/author';
 import { Observable } from 'rxjs';
+
+export interface CreateAuthorBody {
+  name: string;
+  bio?: string;
+}
+
+export interface UpdateAuthorBody {
+  name?: string;
+  bio?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthorService {
@@ -20,5 +30,13 @@ export class AuthorService {
     return this.http.get<AuthorsListResponse>(`${this.baseUrl}/authors`, {
       params: httpParams,
     });
+  }
+
+  createAuthor(body: CreateAuthorBody): Observable<Author> {
+    return this.http.post<Author>(`${this.baseUrl}/authors`, body);
+  }
+
+  updateAuthor(id: string, body: UpdateAuthorBody): Observable<Author> {
+    return this.http.patch<Author>(`${this.baseUrl}/authors/${id}`, body);
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReviewService } from '../../../../core/services/review';
+import { ReviewService } from '../../../../core/services/review.service';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({

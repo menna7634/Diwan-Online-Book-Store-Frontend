@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ReviewService } from '../../../../core/services/review';
+import { ReviewService } from '../../../../core/services/review.service';
 
 @Component({
   selector: 'app-review-form',
