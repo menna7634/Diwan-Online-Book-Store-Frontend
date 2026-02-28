@@ -1,8 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
+import { finalize } from 'rxjs';
 
 interface BookSummary {
   _id: string;
@@ -65,7 +66,7 @@ const PAYMENT_TRANSITIONS: Record<string, string[]> = {
 export class OrdersPage implements OnInit {
   private http = inject(HttpClient);
   private API = environment.apiUrl;
-
+  private cdr = inject(ChangeDetectorRef);
   orders: Order[] = [];
   loading = true;
   currentPage = 1;
@@ -112,6 +113,7 @@ export class OrdersPage implements OnInit {
         params,
         headers: { 'Cache-Control': 'no-cache' },
       })
+      .pipe(finalize(() => this.cdr.detectChanges()))
       .subscribe({
         next: (res) => {
           this.orders = res.data;
@@ -152,6 +154,7 @@ export class OrdersPage implements OnInit {
     this.statusNote = '';
     this.updateError = '';
     this.showModal = true;
+    this.cdr.detectChanges();
   }
 
   closeModal() {
@@ -183,18 +186,20 @@ export class OrdersPage implements OnInit {
     if (this.newPaymentStatus) body.payment_status = this.newPaymentStatus;
     if (this.statusNote) body.note = this.statusNote;
 
-    this.http.patch<any>(`${this.API}/order/${this.selectedOrder._id}`, body).subscribe({
-      next: (res) => {
-        const idx = this.orders.findIndex((o) => o._id === this.selectedOrder!._id);
-        if (idx !== -1) this.orders[idx] = res.data.order;
-        this.updating = false;
-        this.closeModal();
-      },
-      error: (err) => {
-        this.updateError = err.error?.message ?? 'Failed to update order.';
-        this.updating = false;
-      },
-    });
+    this.http.patch<any>(`${this.API}/order/${this.selectedOrder._id}`, body)
+      .pipe(finalize(() => this.cdr.detectChanges()))
+      .subscribe({
+        next: (res) => {
+          const idx = this.orders.findIndex((o) => o._id === this.selectedOrder!._id);
+          if (idx !== -1) this.orders[idx] = res.data.order;
+          this.updating = false;
+          this.closeModal();
+        },
+        error: (err) => {
+          this.updateError = err.error?.message ?? 'Failed to update order.';
+          this.updating = false;
+        },
+      });
   }
 
   toggleExpand(id: string) {
