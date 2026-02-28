@@ -66,7 +66,7 @@ Browse books, manage your cart, place orders, and write reviews — all in one p
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-org/diwan-frontend.git
+git clone https://github.com/Mostafa-Khalifaa/diwan-frontend.git
 cd diwan-frontend
 
 # Install dependencies
