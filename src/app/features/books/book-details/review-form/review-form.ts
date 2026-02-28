@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReviewService } from '../../../../core/services/review';
@@ -7,7 +7,7 @@ import { ReviewService } from '../../../../core/services/review';
   selector: 'app-review-form',
   templateUrl: './review-form.html',
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule],
 })
 export class ReviewFormComponent {
   @Input() bookId: string = '';
@@ -19,7 +19,10 @@ export class ReviewFormComponent {
   successMessage: string = '';
   errorMessage: string = '';
 
-  constructor(private reviewService: ReviewService) {}
+  constructor(
+    private reviewService: ReviewService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   setRating(star: number): void {
     this.selectedRating = star;
@@ -35,22 +38,26 @@ export class ReviewFormComponent {
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.reviewService.addReview({
-      book_id: this.bookId,
-      rating: this.selectedRating,
-      comment: this.comment
-    }).subscribe({
-      next: () => {
-        this.successMessage = 'Review added successfully!';
-        this.selectedRating = 0;
-        this.comment = '';
-        this.isLoading = false;
-        this.reviewAdded.emit();
-      },
-      error: (err) => {
-        this.errorMessage = err.error?.details || 'Failed to add review';
-        this.isLoading = false;
-      }
-    });
+    this.reviewService
+      .addReview({
+        book_id: this.bookId,
+        rating: this.selectedRating,
+        comment: this.comment,
+      })
+      .subscribe({
+        next: () => {
+          this.successMessage = 'Review added successfully!';
+          this.selectedRating = 0;
+          this.comment = '';
+          this.isLoading = false;
+          this.reviewAdded.emit();
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          this.errorMessage = err.error?.details || 'Failed to add review';
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        },
+      });
   }
 }
