@@ -13,7 +13,7 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  private readonly API = 'http://localhost:3000';
+  private readonly API = 'https://diwan-book-store-backend-production.up.railway.app';
 
   private http = inject(HttpClient);
 
