@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, finalize, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { User } from '../types/user';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { RegisterationRequestBody, UpdateProfileRequestBody } from '../types/auth';
 
@@ -40,11 +40,21 @@ export class AuthService {
     return this.http.get(`${environment.apiUrl}/auth/verify?token=${token}`);
   }
   updateUserProfile(data: UpdateProfileRequestBody): Observable<User> {
-    return this.http.post<User>(`${environment.apiUrl}/profile`, data).pipe(
+    return this.http.patch<User>(`${environment.apiUrl}/profile`, data).pipe(
       tap(user => this._user$.next(user)),
     );
   }
-
+  forgetPassword(email:string) {
+    return this.http.post(`${environment.apiUrl}/auth/forget-password`, {
+      "email": email,
+    });
+  }
+  resetPassword(newPassword: string, token: string) {
+    return this.http.post(`${environment.apiUrl}/auth/reset-password`, {
+      "password": newPassword,
+      "token": token
+    });
+  }
   logout(): Observable<any> {
     return this.http.post(`${environment.apiUrl}/auth/logout`, null).pipe(
       finalize(() => {
