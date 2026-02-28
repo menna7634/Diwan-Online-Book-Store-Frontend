@@ -4,17 +4,17 @@ import { environment } from '../../../environments/environment';
 import { Book, BooksListResponse, BooksQueryParams } from '../types/book';
 import { Observable } from 'rxjs';
 
-
 //Injectable: tells Angular this class is a service
-@Injectable({ providedIn: 'root',}) //Angular creates one shared instance for the whole app
+@Injectable({ providedIn: 'root' }) //Angular creates one shared instance for the whole app
 export class BookService {
-  private http = inject(HttpClient); //access to http tools 
+  private http = inject(HttpClient); //access to http tools
   private baseUrl = environment.apiUrl;
 
-  getBooks(params?: BooksQueryParams): Observable<BooksListResponse> { //observble is a container for future result because data is not ready yet, it takes ms to get fetched
+  getBooks(params?: BooksQueryParams): Observable<BooksListResponse> {
+    //observble is a container for future result because data is not ready yet, it takes ms to get fetched
     let httpParams = new HttpParams();
 
-    //if search = "happy" query string becomes ?search=happy 
+    //if search = "happy" query string becomes ?search=happy
     //HttpParams is immutable, so .set() returns a new object, that is why we re-assign so it saves
     if (params?.search) {
       httpParams = httpParams.set('search', params.search);
@@ -27,6 +27,9 @@ export class BookService {
     }
     if (params?.authorIds) {
       httpParams = httpParams.set('authorIds', params.authorIds);
+    }
+    if (params?.categoryIds) {
+      httpParams = httpParams.set('categoryIds', params.categoryIds);
     }
     if (params?.minPrice !== undefined) {
       httpParams = httpParams.set('minPrice', params.minPrice.toString());
@@ -41,7 +44,7 @@ export class BookService {
       httpParams = httpParams.set('order', params.order);
     }
 
-    // HttpClient has a get<t> function 
+    // HttpClient has a get<t> function
     return this.http.get<BooksListResponse>(`${this.baseUrl}/books`, {
       params: httpParams,
     });
@@ -50,5 +53,16 @@ export class BookService {
   getBook(id: string): Observable<Book> {
     return this.http.get<Book>(`${this.baseUrl}/books/${id}`);
   }
-}
 
+  createBook(formData: FormData): Observable<Book> {
+    return this.http.post<Book>(`${this.baseUrl}/books`, formData);
+  }
+
+  updateBook(id: string, formData: FormData): Observable<Book> {
+    return this.http.patch<Book>(`${this.baseUrl}/books/${id}`, formData);
+  }
+
+  deleteBook(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/books/${id}`);
+  }
+}

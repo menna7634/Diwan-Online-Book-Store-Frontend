@@ -17,6 +17,7 @@ export class Home implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   popularBooks: Book[] = [];
+  totalBooks = 0;
   isLoadingPopular = false;
   popularError = '';
 
@@ -38,6 +39,7 @@ export class Home implements OnInit {
     this.bookService.getBooks({ page: 1, limit: 4 }).subscribe({
       next: (response) => {
         this.popularBooks = response.data;
+        this.totalBooks = response.pagination.total;
         this.isLoadingPopular = false;
         this.cdr.detectChanges();
       },
@@ -68,4 +70,3 @@ export class Home implements OnInit {
     });
   }
 }
-

@@ -41,7 +41,7 @@
                 </svg>
                 <div
                     class="bg-primary text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md mt-4 animate-bounce">
-                    20+ Books Available
+                    {{ totalBooks }}+ Books Available
                 </div>
             </div>
         </div>
@@ -75,17 +75,14 @@
             </div>
 
             <div *ngIf="!isLoadingPopular && !popularError && popularBooks.length > 0"
-                 class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <a *ngFor="let book of popularBooks"
-                   [routerLink]="['/books', book._id]"
-                   class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col h-full cursor-pointer no-underline text-inherit">
+                class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <a *ngFor="let book of popularBooks" [routerLink]="['/books', book._id]"
+                    class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col h-full cursor-pointer no-underline text-inherit">
                     <div class="h-64 bg-gray-100 w-full relative flex items-center justify-center p-2">
-                        <img *ngIf="book.book_cover_url"
-                             [src]="book.book_cover_url"
-                             [alt]="book.book_title"
-                             class="w-full h-full object-contain rounded" />
+                        <img *ngIf="book.book_cover_url" [src]="book.book_cover_url" [alt]="book.book_title"
+                            class="w-full h-full object-contain rounded" />
                         <div *ngIf="!book.book_cover_url"
-                             class="w-full h-full bg-gray-200 rounded shadow-sm flex items-center justify-center text-gray-400">
+                            class="w-full h-full bg-gray-200 rounded shadow-sm flex items-center justify-center text-gray-400">
                             No cover
                         </div>
                     </div>
@@ -127,16 +124,16 @@
                 {{ popularAuthorsError }}
             </div>
 
-            <div *ngIf="!isLoadingPopularAuthors && !popularAuthorsError && popularAuthors.length === 0" class="text-textSub">
+            <div *ngIf="!isLoadingPopularAuthors && !popularAuthorsError && popularAuthors.length === 0"
+                class="text-textSub">
                 No authors available yet.
             </div>
 
             <div *ngIf="!isLoadingPopularAuthors && !popularAuthorsError && popularAuthors.length > 0"
-                 class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                <a *ngFor="let author of popularAuthors"
-                   [routerLink]="['/books']"
-                   [queryParams]="{ authorIds: author._id }"
-                   class="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col items-center text-center hover:border-primary/30 hover:shadow-lg transition-all cursor-pointer group no-underline text-inherit">
+                class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <a *ngFor="let author of popularAuthors" [routerLink]="['/books']"
+                    [queryParams]="{ authorIds: author._id }"
+                    class="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col items-center text-center hover:border-primary/30 hover:shadow-lg transition-all cursor-pointer group no-underline text-inherit">
                     <div
                         class="w-24 h-24 rounded-full bg-gray-100 mb-4 overflow-hidden border-4 border-white shadow-sm flex items-center justify-center text-2xl font-bold text-primary group-hover:scale-105 transition-transform duration-300">
                         {{ author.name.charAt(0) }}
