@@ -23,5 +23,7 @@ export interface UpdateProfileRequestBody {
     state?: string;
     country?: string;
     zipCode?: string;
-  }
+  };
+  password?: string;
+  oldPassword?: string;
 }
