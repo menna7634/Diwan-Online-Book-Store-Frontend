@@ -131,6 +131,9 @@
                 [class.border-red-400]="submitted && !shipping.phone"
                 [class.border-gray-200]="!(submitted && !shipping.phone)"
               />
+              <p *ngIf="submitted && !isPhoneValid()" class="text-red-500 text-xs mt-1">
+                Phone must be 11 digits starting with 010, 011, or 012
+              </p>
             </div>
 
             <div class="sm:col-span-2 flex flex-col gap-1.5">
@@ -201,6 +204,9 @@
                 [class.border-red-400]="submitted && !shipping.zipCode"
                 [class.border-gray-200]="!(submitted && !shipping.zipCode)"
               />
+              <p *ngIf="submitted && !isZipValid()" class="text-red-500 text-xs mt-1">
+                Zip code must be numbers only
+              </p>
             </div>
           </div>
 
