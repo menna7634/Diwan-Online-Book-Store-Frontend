@@ -40,9 +40,21 @@ export class CheckoutComponent {
     phone: '',
   };
 
+  isPhoneValid(): boolean {
+    return /^(010|011|012)\d{8}$/.test(this.shipping.phone);
+  }
+
+  isZipValid(): boolean {
+    return /^\d+$/.test(this.shipping.zipCode);
+  }
+
   isAddressValid(): boolean {
     const { fullName, street, city, state, country, zipCode, phone } = this.shipping;
-    return !!(fullName && street && city && state && country && zipCode && phone);
+    return (
+      !!(fullName && street && city && state && country && zipCode && phone) &&
+      this.isPhoneValid() &&
+      this.isZipValid()
+    );
   }
 
   goToPayment() {
@@ -66,7 +78,8 @@ export class CheckoutComponent {
           this.placing = false;
           this.placedOrderId = order._id;
           this.orderPlaced = true;
-          // Cart is cleared on the backend after placing order — reload it
+          // Cart is cleared on the backend after placing order
+          // reload it
           this.cartService.loadCart();
           window.scrollTo({ top: 0, behavior: 'smooth' });
         },
