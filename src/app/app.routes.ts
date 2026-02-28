@@ -4,7 +4,6 @@ import { LoginPage } from './features/auth/login/login.page';
 import { RegisterPage } from './features/auth/register/register.page';
 import { guestGuard } from './core/guards/guest-guard';
 import { AdminPanelLayout } from './core/features/admin/admin-panel/admin-panel.layout';
-import { DashboardPage } from './core/features/admin/dashboard/dashboard.page';
 import { OrdersPage } from './core/features/admin/orders/orders.page';
 import { AuthorsPage } from './core/features/admin/authors/authors.page';
 import { CategoriesPage } from './core/features/admin/categories/categories.page';
@@ -31,15 +30,12 @@ export const routes: Routes = [
     canActivate: [guestGuard],
   },
   {
-
     path: 'books/:id',
-    loadComponent: () =>
-      import('./features/books/book-detail.page').then((m) => m.BookDetailPage),
+    loadComponent: () => import('./features/books/book-detail.page').then((m) => m.BookDetailPage),
   },
   {
     path: 'books',
-    loadComponent: () =>
-      import('./features/books/books.page').then((m) => m.BooksPage),
+    loadComponent: () => import('./features/books/books.page').then((m) => m.BooksPage),
   },
   {
     path: 'profile',
@@ -72,10 +68,6 @@ export const routes: Routes = [
     canActivate: [isadminGuard],
     children: [
       {
-        path: 'dashboard',
-        component: DashboardPage,
-      },
-      {
         path: 'orders',
         component: OrdersPage,
       },
@@ -93,7 +85,7 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'orders',
         pathMatch: 'full',
       },
     ],
@@ -113,5 +105,5 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/orders/orders.component').then((m) => m.OrdersComponent),
   },
-  { path: '**', component: NotFoundComponent }
+  { path: '**', component: NotFoundComponent },
 ];
