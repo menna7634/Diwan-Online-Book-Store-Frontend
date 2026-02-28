@@ -17,20 +17,16 @@ export class CartService {
 
   private http = inject(HttpClient);
 
-  // ── Reactive cart state ───────────────────────────────────────────────────
+  // Reactive cart state
   private _cart = signal<Cart>({ items: [], totalItems: 0, subtotal: 0, shipping: 0, total: 0 });
 
-  /** Read-only signal consumed by components */
   readonly cart = this._cart.asReadonly();
   readonly cartCount = computed(() => this._cart().totalItems);
 
   constructor() {
-    this.loadCart();
+    // this.loadCart();
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-
-  /** Flatten raw backend cart → frontend Cart */
   private mapCart(raw: CartRaw): Cart {
     const items: CartItem[] = raw.items.map((i) => {
       const isPopulated = typeof i.book_id === 'object';
@@ -55,20 +51,17 @@ export class CartService {
     };
   }
 
-  // ── GET /api/cart ─────────────────────────────────────────────────────────
   loadCart(): void {
     this.http
-      .get<{ status: string; data: { items: CartItemRaw[]; total: number } }>(`${this.API}/cart`)
+      .get<{ status: string; data: { data: CartItemRaw[]; total: number } }>(`${this.API}/cart`)
       .pipe(
         map((res) =>
-          this.mapCart({ _id: '', user_id: '', items: res.data.items, total: res.data.total }),
+          this.mapCart({ _id: '', user_id: '', items: res.data.data, total: res.data.total }),
         ),
         catchError(() => of(this._cart())),
       )
       .subscribe((cart) => this._cart.set(cart));
   }
-
-  // ── POST /api/cart/items   body: { bookId, quantity, price } ──────────────
   addToCart(bookId: string, quantity: number, price: number): Observable<Cart> {
     return this.http
       .post<{
@@ -81,7 +74,6 @@ export class CartService {
       );
   }
 
-  // ── PATCH /api/cart/items/:bookId   body: { quantity } ────────────────────
   setQuantity(bookId: string, quantity: number): Observable<Cart> {
     return this.http
       .patch<{
@@ -94,7 +86,6 @@ export class CartService {
       );
   }
 
-  // ── PATCH /api/cart/items/:bookId/increase   body: { step? } ─────────────
   increaseQuantity(bookId: string, step = 1): Observable<Cart> {
     return this.http
       .patch<{
@@ -107,7 +98,6 @@ export class CartService {
       );
   }
 
-  // ── PATCH /api/cart/items/:bookId/decrease   body: { step? } ─────────────
   decreaseQuantity(bookId: string, step = 1): Observable<Cart> {
     return this.http
       .patch<{
@@ -120,7 +110,6 @@ export class CartService {
       );
   }
 
-  // ── DELETE /api/cart/items/:bookId ────────────────────────────────────────
   removeItem(bookId: string): Observable<Cart> {
     return this.http
       .delete<{ status: string; data: { cart: CartRaw } }>(`${this.API}/cart/items/${bookId}`)
@@ -130,7 +119,6 @@ export class CartService {
       );
   }
 
-  // ── DELETE /api/cart ──────────────────────────────────────────────────────
   clearCart(): Observable<Cart> {
     return this.http.delete<{ status: string; data: { cart: CartRaw } }>(`${this.API}/cart`).pipe(
       map((res) => this.mapCart(res.data.cart)),
@@ -138,14 +126,12 @@ export class CartService {
     );
   }
 
-  // ── POST /api/order   body: PlaceOrderRequest ────────────────────────────
   placeOrder(body: PlaceOrderRequest): Observable<Order> {
     return this.http
       .post<{ status: string; data: { order: Order } }>(`${this.API}/order`, body)
       .pipe(map((res) => res.data.order));
   }
 
-  // ── GET /api/order/my ────────────────────────────────────────────────────
   getMyOrders(
     page = 1,
     limit = 10,
@@ -159,7 +145,6 @@ export class CartService {
     );
   }
 
-  // ── GET /api/order/:orderId ──────────────────────────────────────────────
   getOrderById(orderId: string): Observable<Order> {
     return this.http
       .get<{ status: string; data: { order: Order } }>(`${this.API}/order/${orderId}`)
