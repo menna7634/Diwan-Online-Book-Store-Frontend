@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidatorFn, Validators, FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { UpdateProfileRequestBody } from '../../../types/auth';
+import { RouterLink, RouterModule } from "@angular/router";
 
 
 const noFutureDateValidator: ValidatorFn = (control: AbstractControl) => {
@@ -19,7 +20,7 @@ const noFutureDateValidator: ValidatorFn = (control: AbstractControl) => {
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, RouterModule],
   templateUrl: './profile.page.html',
 })
 export class ProfilePage {

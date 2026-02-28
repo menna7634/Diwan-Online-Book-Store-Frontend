@@ -14,6 +14,9 @@ import { ProfilePage } from './core/features/auth/profile/profile.page';
 import { authGuardGuard } from './core/guards/auth.guard-guard';
 import { VerifyPage } from './core/features/auth/verify/verify.page';
 import { NotFoundComponent } from './core/features/not-found/not-found';
+import { ChangePasswordPage } from './core/features/auth/change-password/change-password.page';
+import { ForgetPasswordPage } from './core/features/auth/forget-password/forget-password.page';
+import { ResetPasswordPage } from './core/features/auth/reset-password/reset-password.page';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -46,6 +49,21 @@ export const routes: Routes = [
   {
     path: 'verify-email',
     component: VerifyPage,
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'change-password',
+    component: ChangePasswordPage,
+    canActivate: [authGuardGuard],
+  },
+  {
+    path: 'forget-password',
+    component: ForgetPasswordPage,
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordPage,
     canActivate: [guestGuard],
   },
   {
