@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:3000',
+  apiUrl: 'https://diwan-book-store-backend-production.up.railway.app',
 };
