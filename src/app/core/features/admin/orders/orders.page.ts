@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
-import { finalize } from 'rxjs';
 
 interface BookSummary {
   _id: string;
@@ -65,8 +64,10 @@ const PAYMENT_TRANSITIONS: Record<string, string[]> = {
 })
 export class OrdersPage implements OnInit {
   private http = inject(HttpClient);
-  private API = environment.apiUrl;
   private cdr = inject(ChangeDetectorRef);
+
+  private API = environment.apiUrl;
+
   orders: Order[] = [];
   loading = true;
   currentPage = 1;
@@ -74,7 +75,6 @@ export class OrdersPage implements OnInit {
   total = 0;
   readonly limit = 10;
 
-  // Filters
   filterOrderStatus = '';
   filterPaymentStatus = '';
   filterDateFrom = '';
@@ -83,7 +83,6 @@ export class OrdersPage implements OnInit {
   readonly orderStatuses = ['placed', 'processing', 'shipped', 'delivered', 'cancelled'];
   readonly paymentStatuses = ['pending', 'paid', 'failed', 'refunded'];
 
-  // Update modal
   showModal = false;
   selectedOrder: Order | null = null;
   newOrderStatus = '';
@@ -92,7 +91,6 @@ export class OrdersPage implements OnInit {
   updating = false;
   updateError = '';
 
-  // Expand
   expandedOrder: string | null = null;
 
   ngOnInit() {
@@ -109,20 +107,21 @@ export class OrdersPage implements OnInit {
     if (this.filterDateTo) params.to = this.filterDateTo;
 
     this.http
-      .get<any>(`${this.API}/order`, {
-        params,
-        headers: { 'Cache-Control': 'no-cache' },
-      })
-      .pipe(finalize(() => this.cdr.detectChanges()))
+      .get<any>(`${this.API}/order`, { params, headers: { 'Cache-Control': 'no-cache' } })
       .subscribe({
         next: (res) => {
-          this.orders = res.data;
+          this.orders = [...res.data];
           this.total = res.pagination?.total ?? 0;
           this.totalPages = res.pagination?.totalPages ?? 1;
           this.currentPage = res.pagination?.page ?? 1;
           this.loading = false;
+
+          this.cdr.detectChanges();
         },
-        error: () => (this.loading = false),
+        error: () => {
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
       });
   }
 
@@ -154,7 +153,6 @@ export class OrdersPage implements OnInit {
     this.statusNote = '';
     this.updateError = '';
     this.showModal = true;
-    this.cdr.detectChanges();
   }
 
   closeModal() {
@@ -178,6 +176,7 @@ export class OrdersPage implements OnInit {
 
   submitUpdate() {
     if (!this.selectedOrder || !this.canSubmit()) return;
+
     this.updating = true;
     this.updateError = '';
 
@@ -186,20 +185,22 @@ export class OrdersPage implements OnInit {
     if (this.newPaymentStatus) body.payment_status = this.newPaymentStatus;
     if (this.statusNote) body.note = this.statusNote;
 
-    this.http.patch<any>(`${this.API}/order/${this.selectedOrder._id}`, body)
-      .pipe(finalize(() => this.cdr.detectChanges()))
-      .subscribe({
-        next: (res) => {
-          const idx = this.orders.findIndex((o) => o._id === this.selectedOrder!._id);
-          if (idx !== -1) this.orders[idx] = res.data.order;
-          this.updating = false;
-          this.closeModal();
-        },
-        error: (err) => {
-          this.updateError = err.error?.message ?? 'Failed to update order.';
-          this.updating = false;
-        },
-      });
+    this.http.patch<any>(`${this.API}/order/${this.selectedOrder._id}`, body).subscribe({
+      next: (res) => {
+        const updatedOrder = res.data.order;
+
+        this.orders = this.orders.map((o) => (o._id === updatedOrder._id ? updatedOrder : o));
+
+        this.updating = false;
+        this.closeModal();
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.updateError = err.error?.message ?? 'Failed to update order.';
+        this.updating = false;
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   toggleExpand(id: string) {
@@ -237,7 +238,7 @@ export class OrdersPage implements OnInit {
     return map[status] ?? 'bg-gray-100 text-gray-600';
   }
 
-  paymentStatusClass(status: string): string {
+  paymentStatusClass(status: string) {
     const map: Record<string, string> = {
       pending: 'bg-amber-100 text-amber-700 border border-amber-200',
       paid: 'bg-emerald-100 text-emerald-700 border border-emerald-200',
@@ -247,7 +248,7 @@ export class OrdersPage implements OnInit {
     return map[status] ?? 'bg-gray-100 text-gray-600';
   }
 
-  paymentLabel(method: string): string {
+  paymentLabel(method: string) {
     return method === 'cash_on_delivery' ? 'Cash on Delivery' : 'Card';
   }
 
