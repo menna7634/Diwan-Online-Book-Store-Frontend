@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
@@ -12,6 +12,7 @@ import { Order, OrderStatus, OrderBook } from '../../core/types/cart.types';
 })
 export class OrdersComponent implements OnInit {
   private cartService = inject(CartService);
+  private cdr = inject(ChangeDetectorRef);
 
   orders: Order[] = [];
   loading = true;
@@ -27,15 +28,20 @@ export class OrdersComponent implements OnInit {
 
   loadOrders(page = 1) {
     this.loading = true;
+
     this.cartService.getMyOrders(page, this.limit).subscribe({
       next: ({ data, totalPages, currentPage }) => {
-        this.orders = data;
+        this.orders = [...data];
+
         this.totalPages = totalPages;
         this.currentPage = currentPage;
         this.loading = false;
+
+        this.cdr.detectChanges();
       },
       error: () => {
         this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -67,10 +73,10 @@ export class OrdersComponent implements OnInit {
   statusClass(status: OrderStatus): string {
     const map: Record<OrderStatus, string> = {
       placed: 'bg-yellow-100 text-yellow-700',
-      processing: 'bg-blue-100   text-blue-700',
+      processing: 'bg-blue-100 text-blue-700',
       shipped: 'bg-purple-100 text-purple-700',
-      delivered: 'bg-green-100  text-green-700',
-      cancelled: 'bg-red-100    text-red-700',
+      delivered: 'bg-green-100 text-green-700',
+      cancelled: 'bg-red-100 text-red-700',
     };
     return map[status] ?? 'bg-gray-100 text-gray-600';
   }
